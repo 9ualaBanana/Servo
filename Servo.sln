@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Servo", "Servo\Servo.csproj", "{D052A576-E2FD-4F4D-9349-7B53CC4B7547}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Servo", "Servo\Servo.csproj", "{D052A576-E2FD-4F4D-9349-7B53CC4B7547}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Servo.Test", "Servo.Test\Servo.Test.csproj", "{6E1FB640-68CA-425B-8EF6-DEA3107C5D93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D052A576-E2FD-4F4D-9349-7B53CC4B7547}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D052A576-E2FD-4F4D-9349-7B53CC4B7547}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D052A576-E2FD-4F4D-9349-7B53CC4B7547}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E1FB640-68CA-425B-8EF6-DEA3107C5D93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E1FB640-68CA-425B-8EF6-DEA3107C5D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E1FB640-68CA-425B-8EF6-DEA3107C5D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E1FB640-68CA-425B-8EF6-DEA3107C5D93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
