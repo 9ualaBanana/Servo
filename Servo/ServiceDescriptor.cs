@@ -2,7 +2,7 @@
 
 namespace Servo;
 
-public class ServiceDescriptor
+public record ServiceDescriptor
 {
     public readonly Type ServiceType;
     public readonly Type? ImplementationType;
@@ -64,14 +64,14 @@ public class ServiceDescriptor
     public static ServiceDescriptor Transient<TService, TImplementation>(Func<TImplementation> factory)
         where TService : class
         where TImplementation : class, TService =>
-        Describe(typeof(TService), factory, ServiceLifetime.Transient);
+        Describe(factory, ServiceLifetime.Transient);
 
     public static ServiceDescriptor Transient<TService>(Func<TService> factory)
         where TService : class =>
-        Describe(typeof(TService), factory, ServiceLifetime.Transient);
+        Describe(factory, ServiceLifetime.Transient);
 
-    public static ServiceDescriptor Transient(Type serviceType, Func<object> factory) =>
-        Describe(serviceType, factory, ServiceLifetime.Transient);
+    public static ServiceDescriptor Transient(Func<object> factory) =>
+        Describe(factory, ServiceLifetime.Transient);
 
     public static ServiceDescriptor Transient<TService, TImplementation>()
         where TService : class
@@ -86,14 +86,14 @@ public class ServiceDescriptor
     public static ServiceDescriptor Scoped<TService, TImplementation>(Func<TImplementation> factory)
         where TService : class
         where TImplementation : class, TService =>
-        Describe(typeof(TService), factory, ServiceLifetime.Scoped);
+        Describe(factory, ServiceLifetime.Scoped);
 
     public static ServiceDescriptor Scoped<TService>(Func<TService> factory)
         where TService : class =>
-        Describe(typeof(TService), factory, ServiceLifetime.Scoped);
+        Describe(factory, ServiceLifetime.Scoped);
 
-    public static ServiceDescriptor Scoped(Type serviceType, Func<object> factory) =>
-        Describe(serviceType, factory, ServiceLifetime.Scoped);
+    public static ServiceDescriptor Scoped(Func<object> factory) =>
+        Describe(factory, ServiceLifetime.Scoped);
 
     public static ServiceDescriptor Scoped<TService, TImplementation>()
         where TService : class
@@ -108,14 +108,14 @@ public class ServiceDescriptor
     public static ServiceDescriptor Singleton<TService, TImplementation>(Func<TImplementation> factory)
         where TService : class
         where TImplementation : class, TService =>
-        Describe(typeof(TService), factory, ServiceLifetime.Singleton);
+        Describe(factory, ServiceLifetime.Singleton);
 
     public static ServiceDescriptor Singleton<TService>(Func<TService> factory)
         where TService : class =>
-        Describe(typeof(TService), factory, ServiceLifetime.Singleton);
+        Describe(factory, ServiceLifetime.Singleton);
 
-    public static ServiceDescriptor Singleton(Type serviceType, Func<object> factory) =>
-        Describe(serviceType, factory, ServiceLifetime.Singleton);
+    public static ServiceDescriptor Singleton(Func<object> factory) =>
+        Describe(factory, ServiceLifetime.Singleton);
 
     public static ServiceDescriptor Singleton<TService, TImplementation>()
         where TService : class
@@ -133,16 +133,20 @@ public class ServiceDescriptor
         Describe(serviceType, implementationType, ServiceLifetime.Singleton);
     #endregion
 
+    public static ServiceDescriptor Describe<TService, TImplementation>(ServiceLifetime lifetime)
+        where TService : class
+        where TImplementation : class, TService =>
+        Describe(typeof(TService), typeof(TImplementation), lifetime);
+
     public static ServiceDescriptor Describe(Type serviceType, Type implementationType, ServiceLifetime lifetime) =>
         new(serviceType, implementationType, lifetime);
 
     public static ServiceDescriptor Describe<TService>(
-        Type serviceType,
         Func<TService> factory,
         ServiceLifetime lifetime) where TService : class
     {
         object downcastedFactory() => factory();
-        return new(serviceType, downcastedFactory, lifetime);
+        return new(typeof(TService), downcastedFactory, lifetime);
     }
 
     #endregion
