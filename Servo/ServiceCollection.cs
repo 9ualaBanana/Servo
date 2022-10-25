@@ -14,6 +14,8 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
     #endregion
 
     #region Singleton
+
+    #region AddSingleton
     public ServiceCollection AddSingleton<TService>(TService service) where TService : class =>
         AddSingleton(typeof(TService), service);
 
@@ -39,6 +41,36 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
 
     public ServiceCollection AddSingleton(Type serviceType, Func<object> factory) =>
         Add(serviceType, factory, ServiceLifetime.Singleton);
+    #endregion
+
+    #region TryAddSingleton
+    public ServiceCollection TryAddSingleton<TService>(TService service) where TService : class =>
+        TryAddSingleton(typeof(TService), service);
+
+    public ServiceCollection TryAddSingleton(Type serviceType, object service) =>
+        TryAdd(new ServiceDescriptor(serviceType, service));
+
+    public ServiceCollection TryAddSingleton<TService>() where TService : class =>
+        TryAdd<TService>(ServiceLifetime.Singleton);
+
+    public ServiceCollection TryAddSingleton(Type serviceType) =>
+        TryAdd(serviceType, ServiceLifetime.Singleton);
+
+    public ServiceCollection TryAddSingleton<TService, TImplementation>()
+        where TService : class
+        where TImplementation : class, TService =>
+        TryAdd<TService, TImplementation>(ServiceLifetime.Singleton);
+
+    public ServiceCollection TryAddSingleton(Type serviceType, Type implementationType) =>
+        TryAdd(serviceType, implementationType, ServiceLifetime.Singleton);
+
+    public ServiceCollection TryAddSingleton<TService>(Func<TService> factory) where TService : class =>
+        TryAdd(factory, ServiceLifetime.Singleton);
+
+    public ServiceCollection TryAddSingleton(Type serviceType, Func<object> factory) =>
+        TryAdd(serviceType, factory, ServiceLifetime.Singleton);
+    #endregion
+
     #endregion
 
 
