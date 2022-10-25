@@ -9,7 +9,51 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
 
     #region LifetimeAdds
 
-    #region Scoped
+    #region Transient
+
+    #region AddTransient
+    public ServiceCollection AddTransient<TService>() where TService : class =>
+        Add<TService>(ServiceLifetime.Transient);
+
+    public ServiceCollection AddTransient(Type serviceType) =>
+        Add(serviceType, ServiceLifetime.Transient);
+
+    public ServiceCollection AddTransient<TService, TImplementation>()
+        where TService : class
+        where TImplementation : class, TService =>
+        Add<TService, TImplementation>(ServiceLifetime.Transient);
+
+    public ServiceCollection AddTransient(Type serviceType, Type implementationType) =>
+        Add(serviceType, implementationType, ServiceLifetime.Transient);
+
+    public ServiceCollection AddTransient<TService>(Func<TService> factory) where TService : class =>
+        Add(factory, ServiceLifetime.Transient);
+
+    public ServiceCollection AddTransient(Type serviceType, Func<object> factory) =>
+        Add(serviceType, factory, ServiceLifetime.Transient);
+    #endregion
+
+    #region TryAddTransient
+    public ServiceCollection TryAddTransient<TService>() where TService : class =>
+        TryAdd<TService>(ServiceLifetime.Transient);
+
+    public ServiceCollection TryAddTransient(Type serviceType) =>
+        TryAdd(serviceType, ServiceLifetime.Transient);
+
+    public ServiceCollection TryAddTransient<TService, TImplementation>()
+        where TService : class
+        where TImplementation : class, TService =>
+        TryAdd<TService, TImplementation>(ServiceLifetime.Transient);
+
+    public ServiceCollection TryAddTransient(Type serviceType, Type implementationType) =>
+        TryAdd(serviceType, implementationType, ServiceLifetime.Transient);
+
+    public ServiceCollection TryAddTransient<TService>(Func<TService> factory) where TService : class =>
+        TryAdd(factory, ServiceLifetime.Scoped);
+
+    public ServiceCollection TryAddTransient(Type serviceType, Func<object> factory) =>
+        TryAdd(serviceType, factory, ServiceLifetime.Transient);
+    #endregion
 
     #endregion
 
