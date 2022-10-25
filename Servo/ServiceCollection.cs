@@ -7,6 +7,43 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
 {
     readonly Dictionary<Type, List<ServiceDescriptor>> _services = new();
 
+    #region LifetimeAdds
+
+    #region Scoped
+
+    #endregion
+
+    #region Singleton
+    public ServiceCollection AddSingleton<TService>(TService service) where TService : class =>
+        AddSingleton(typeof(TService), service);
+
+    public ServiceCollection AddSingleton(Type serviceType, object service) =>
+        Add(new ServiceDescriptor(serviceType, service));
+
+    public ServiceCollection AddSingleton<TService>() where TService : class =>
+        Add<TService>(ServiceLifetime.Singleton);
+
+    public ServiceCollection AddSingleton(Type serviceType) =>
+        Add(serviceType, ServiceLifetime.Singleton);
+
+    public ServiceCollection AddSingleton<TService, TImplementation>()
+        where TService : class
+        where TImplementation : class, TService =>
+        Add<TService, TImplementation>(ServiceLifetime.Singleton);
+
+    public ServiceCollection AddSingleton(Type serviceType, Type implementationType) =>
+        Add(serviceType, implementationType, ServiceLifetime.Singleton);
+
+    public ServiceCollection AddSingleton<TService>(Func<TService> factory) where TService : class =>
+        Add(factory, ServiceLifetime.Singleton);
+
+    public ServiceCollection AddSingleton(Type serviceType, Func<object> factory) =>
+        Add(serviceType, factory, ServiceLifetime.Singleton);
+    #endregion
+
+
+    #endregion
+
     #region ICollection
     public int Count => _services.Aggregate(0, (all, service) => service._Implementations().Count);
 
