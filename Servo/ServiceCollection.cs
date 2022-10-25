@@ -13,6 +13,54 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
 
     #endregion
 
+    #region Scoped
+
+    #region AddScoped
+    public ServiceCollection AddScoped<TService>() where TService : class =>
+        Add<TService>(ServiceLifetime.Scoped);
+
+    public ServiceCollection AddScoped(Type serviceType) =>
+        Add(serviceType, ServiceLifetime.Scoped);
+
+    public ServiceCollection AddScoped<TService, TImplementation>()
+        where TService : class
+        where TImplementation : class, TService =>
+        Add<TService, TImplementation>(ServiceLifetime.Scoped);
+
+    public ServiceCollection AddScoped(Type serviceType, Type implementationType) =>
+        Add(serviceType, implementationType, ServiceLifetime.Scoped);
+
+    public ServiceCollection AddScoped<TService>(Func<TService> factory) where TService : class =>
+        Add(factory, ServiceLifetime.Scoped);
+
+    public ServiceCollection AddScoped(Type serviceType, Func<object> factory) =>
+        Add(serviceType, factory, ServiceLifetime.Scoped);
+    #endregion
+
+    #region TryAddScoped
+    public ServiceCollection TryAddScoped<TService>() where TService : class =>
+        TryAdd<TService>(ServiceLifetime.Scoped);
+
+    public ServiceCollection TryAddScoped(Type serviceType) =>
+        TryAdd(serviceType, ServiceLifetime.Scoped);
+
+    public ServiceCollection TryAddScoped<TService, TImplementation>()
+        where TService : class
+        where TImplementation : class, TService =>
+        TryAdd<TService, TImplementation>(ServiceLifetime.Scoped);
+
+    public ServiceCollection TryAddScoped(Type serviceType, Type implementationType) =>
+        TryAdd(serviceType, implementationType, ServiceLifetime.Scoped);
+
+    public ServiceCollection TryAddScoped<TService>(Func<TService> factory) where TService : class =>
+        TryAdd(factory, ServiceLifetime.Scoped);
+
+    public ServiceCollection TryAddScoped(Type serviceType, Func<object> factory) =>
+        TryAdd(serviceType, factory, ServiceLifetime.Scoped);
+    #endregion
+
+    #endregion
+
     #region Singleton
 
     #region AddSingleton
@@ -72,7 +120,6 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
     #endregion
 
     #endregion
-
 
     #endregion
 
