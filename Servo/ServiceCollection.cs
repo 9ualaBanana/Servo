@@ -302,6 +302,14 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
         return false;
     }
 
+    public ServiceCollection Replace(ServiceDescriptor serviceDescriptor)
+    {
+        if (!_services.TryAdd(serviceDescriptor.ServiceType, new()))
+            _services[serviceDescriptor.ServiceType].RemoveAt(0);
+        _services[serviceDescriptor.ServiceType].Add(serviceDescriptor);
+        return this;
+    }
+
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     public IEnumerator<ServiceDescriptor> GetEnumerator() =>
