@@ -167,6 +167,13 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
 
     #endregion
 
+    #region RemoveAll
+    public ServiceCollection RemoveAll<TService>() => RemoveAll(typeof(TService));
+
+    public ServiceCollection RemoveAll(Type serviceType)
+    { _services.Remove(serviceType); return this; }
+    #endregion
+
     #region ICollection
     public int Count => _services.Aggregate(0, (all, service) => service._Implementations().Count);
 
