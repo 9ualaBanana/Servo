@@ -7,6 +7,7 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
 {
     readonly Dictionary<Type, List<ServiceDescriptor>> _services = new();
 
+
     #region LifetimeAdds
 
     #region Transient
@@ -182,6 +183,13 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
     #region Adds
 
     #region Add
+    public ServiceCollection Add(IEnumerable<ServiceDescriptor> serviceDescriptors)
+    {
+        foreach (var serviceDescriptor in serviceDescriptors)
+            Add(serviceDescriptor);
+        return this;
+    }
+
     public ServiceCollection Add<TService>(ServiceLifetime lifetime)
     where TService : class =>
         Add<TService, TService>(lifetime);
@@ -210,6 +218,23 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
     #endregion
 
     #region TryAdd
+    public ServiceCollection TryAddEnumerable(ServiceDescriptor serviceDescriptor) =>
+        _AddCore(serviceDescriptor, Add_.IfImplementationNotRegistered);
+
+    public ServiceCollection TryAddEnumerable(IEnumerable<ServiceDescriptor> serviceDescriptors)
+    {
+        foreach (var serviceDescriptor in serviceDescriptors)
+            _AddCore(serviceDescriptor, Add_.IfImplementationNotRegistered);
+        return this;
+    }
+
+    public ServiceCollection TryAdd(IEnumerable<ServiceDescriptor> serviceDescriptors)
+    {
+        foreach (var serviceDescriptor in serviceDescriptors)
+            TryAdd(serviceDescriptor);
+        return this;
+    }
+
     public ServiceCollection TryAdd<TService>(ServiceLifetime lifetime)
     where TService : class =>
         TryAdd<TService, TService>(lifetime);
@@ -225,23 +250,27 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
     public ServiceCollection TryAdd(Type serviceType, Type implementationType, ServiceLifetime lifetime) =>
         TryAdd(new ServiceDescriptor(serviceType, implementationType, lifetime));
 
-    public ServiceCollection TryAdd(ServiceDescriptor serviceDescriptor) => _AddCore(serviceDescriptor, try_: true);
+    public ServiceCollection TryAdd(ServiceDescriptor serviceDescriptor) =>
+        _AddCore(serviceDescriptor, Add_.IfServiceNotRegistered);
 
     public ServiceCollection TryAdd<TService>(Func<TService> factory, ServiceLifetime lifetime)
         where TService : class =>
-        _AddCore(ServiceDescriptor.Describe(factory, lifetime), try_: true);
+        _AddCore(ServiceDescriptor.Describe(factory, lifetime), Add_.IfServiceNotRegistered);
 
     public ServiceCollection TryAdd(Type serviceType, Func<object> factory, ServiceLifetime lifetime) =>
-        _AddCore(new ServiceDescriptor(serviceType, factory, lifetime), try_: true);
+        _AddCore(new ServiceDescriptor(serviceType, factory, lifetime), Add_.IfServiceNotRegistered);
     #endregion
 
-    ServiceCollection _AddCore(ServiceDescriptor serviceDescriptor, bool try_ = false)
+    ServiceCollection _AddCore(ServiceDescriptor serviceDescriptor, Add_ add = Add_.Always)
     {
-        if (!_services.ContainsKey(serviceDescriptor.ServiceType))
-            _services.Add(serviceDescriptor.ServiceType, new());
+        if (_services.ContainsKey(serviceDescriptor.ServiceType))
+            if (add is Add_.IfServiceNotRegistered) return this;
+        else _services.Add(serviceDescriptor.ServiceType, new());
+            
         if (_services.TryGetValue(serviceDescriptor.ServiceType, out var serviceImplementations))
         {
-            if (try_ && serviceImplementations.Contains(serviceDescriptor)) return this;
+            if (serviceImplementations.Contains(serviceDescriptor) && add is Add_.IfImplementationNotRegistered)
+                return this;
             serviceImplementations.Add(serviceDescriptor);
         }
         return this;
