@@ -2,7 +2,7 @@
 
 namespace Servo;
 
-public record ServiceDescriptor
+public class ServiceDescriptor
 {
     public readonly Type ServiceType;
     public readonly Type? ImplementationType;

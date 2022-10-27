@@ -295,10 +295,8 @@ public class ServiceCollection : ICollection<ServiceDescriptor>
     {
         bool isRemoved;
         foreach (var service in _services)
-        {
             if (isRemoved = service._Implementations().Remove(serviceDescriptor))
                 return true;
-        }
         return false;
     }
 
