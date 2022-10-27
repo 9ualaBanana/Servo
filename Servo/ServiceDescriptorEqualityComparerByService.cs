@@ -6,7 +6,7 @@ internal class ServiceDescriptorEqualityComparerByService : IEqualityComparer<Se
 {
     public bool Equals(ServiceDescriptor? x, ServiceDescriptor? y)
     {
-        if (x is not null) x.ServiceType.Equals(y?.ServiceType);
+        if (x is not null) return x.ServiceType.Equals(y?.ServiceType);
         else if (y is null) return true;
         return false;
     }
