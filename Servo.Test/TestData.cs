@@ -11,4 +11,6 @@ internal static class TestData
     internal static ArgumentException _derivedFactory() => new();
     internal static SystemException _serviceInstance = new();
     internal static ServiceLifetime _lifetime = ServiceLifetime.Transient;
+
+    internal static ServiceDescriptor _serviceDescriptor = new(typeof(int), default(int));
 }
